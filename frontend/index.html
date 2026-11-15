@@ -1,0 +1,1567 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="theme-color"
+      content="#f5f5ef"
+    />
+    <meta
+      name="description"
+      content="SitWell turns everyday sitting into a more mindful rhythm. A private, local smart cushion companion."
+    />
+    <title>SitWell — Find your rhythm.</title>
+    <!-- Browser tab icon (a small green SVG, stored inline so no extra file is needed) -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%231d4b3d'/%3E%3Cpath d='M10 24q10 10 20-10M10 16h0' fill='none' stroke='%23d1ec95' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <!-- All the styling (colors, layout, fonts) lives in styles.css -->
+    <link
+      rel="stylesheet"
+      href="styles.css"
+    />
+    <!-- All the behavior (buttons, timer, charts, saving settings) lives in app.js. "defer" = run it after the page has loaded -->
+    <script
+      src="config.js"
+      defer
+    ></script>
+    <script
+      src="app.js"
+      defer
+    ></script>
+    <script
+      src="learn.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <!-- ============================================================
+     ICON LIBRARY
+     A hidden list of small icons. Elsewhere in the page, an icon
+     is shown with <svg><use href="#i-name"/></svg>, where "i-name"
+     matches one of the ids below (for example #i-clock).
+     ============================================================ -->
+    <svg
+      class="icon-library"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <symbol
+        id="i-grid"
+        viewBox="0 0 24 24"
+      >
+        <rect
+          x="3.5"
+          y="3.5"
+          width="6"
+          height="6"
+          rx="1.5"
+        />
+        <rect
+          x="14.5"
+          y="3.5"
+          width="6"
+          height="6"
+          rx="1.5"
+        />
+        <rect
+          x="3.5"
+          y="14.5"
+          width="6"
+          height="6"
+          rx="1.5"
+        />
+        <rect
+          x="14.5"
+          y="14.5"
+          width="6"
+          height="6"
+          rx="1.5"
+        />
+      </symbol>
+      <symbol
+        id="i-clock"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="8.5"
+        />
+        <path d="M12 7v5l3.5 2" />
+      </symbol>
+      <symbol
+        id="i-chart"
+        viewBox="0 0 24 24"
+      >
+        <path d="M4 4v16h16M8 15l4-5 4 2 4-7" />
+      </symbol>
+      <symbol
+        id="i-mat"
+        viewBox="0 0 24 24"
+      >
+        <path d="m12 3 10 6-10 6L2 9l10-6ZM2 13l10 6 10-6M2 17l10 6 10-6" />
+      </symbol>
+      <symbol
+        id="i-settings"
+        viewBox="0 0 24 24"
+      >
+        <path d="M4 7h16M4 17h16" />
+        <circle
+          cx="9"
+          cy="7"
+          r="3"
+          fill="currentColor"
+        />
+        <circle
+          cx="16"
+          cy="17"
+          r="3"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol
+        id="i-arrow"
+        viewBox="0 0 24 24"
+      >
+        <path d="M5 12h14m-6-6 6 6-6 6" />
+      </symbol>
+      <symbol
+        id="i-up"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 20V4m-6 6 6-6 6 6" />
+      </symbol>
+      <symbol
+        id="i-leaf"
+        viewBox="0 0 24 24"
+      >
+        <path d="M20 3C7 3 2 8 5 15c3 7 15 4 15-12ZM5 20l10-10" />
+      </symbol>
+      <symbol
+        id="i-download"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+      </symbol>
+      <symbol
+        id="i-check"
+        viewBox="0 0 24 24"
+      >
+        <path d="m5 12 4 4L19 6" />
+      </symbol>
+      <symbol
+        id="i-bell"
+        viewBox="0 0 24 24"
+      >
+        <path d="M5 16h14l-2-3V9a5 5 0 0 0-10 0v4l-2 3ZM10 20h4" />
+      </symbol>
+      <symbol
+        id="i-shield"
+        viewBox="0 0 24 24"
+      >
+        <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" />
+        <path d="m8 12 3 3 5-6" />
+      </symbol>
+      <symbol
+        id="i-close"
+        viewBox="0 0 24 24"
+      >
+        <path d="m6 6 12 12M6 18 18 6" />
+      </symbol>
+      <symbol
+        id="i-spark"
+        viewBox="0 0 24 24"
+      >
+        <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z" />
+      </symbol>
+      <symbol
+        id="i-plug"
+        viewBox="0 0 24 24"
+      >
+        <path d="M8 3v5m8-5v5M5 8h14v4a7 7 0 0 1-14 0V8ZM12 19v3" />
+      </symbol>
+      <symbol
+        id="i-walk"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          cx="14"
+          cy="4"
+          r="2"
+        />
+        <path d="m7 12 3-4 4 1 3 5h4M12 9l-2 7-5 5m6-7 5 3v5" />
+      </symbol>
+      <symbol
+        id="i-info"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="9"
+        />
+        <path d="M12 11v6m0-10h.01" />
+      </symbol>
+      <symbol
+        id="i-book"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 6C9 3 5 3 3 4v15c3-1 6-1 9 2 3-3 6-3 9-2V4c-2-1-6-1-9 2Zm0 0v15M6 8l3 1M6 12l3 1m6-4 3-1m-3 5 3-1"
+        />
+      </symbol>
+    </svg>
+
+    <!-- ============================================================
+     SIDEBAR (the left-hand column that stays on screen)
+     ============================================================ -->
+    <aside class="sidebar">
+      <!-- Logo: the "sitwell." name with a small icon. Clicking it goes back to the Overview page -->
+      <a
+        href="#overview"
+        class="brand"
+        aria-label="SitWell overview"
+        ><span class="brand-mark"
+          ><svg viewBox="0 0 32 32"><path d="M7 19q9 9 18-9M8 10h.01" /></svg></span
+        ><span>sitwell<span class="brand-period">.</span></span></a
+      >
+      <div class="workspace-label">YOUR SPACE</div>
+      <!-- Menu links. data-view tells app.js which page to show; "active" marks the page currently open -->
+      <nav
+        class="main-nav"
+        aria-label="Main navigation"
+      >
+        <a
+          href="#overview"
+          data-view="overview"
+          class="active"
+          ><svg><use href="#i-grid" /></svg><span>Overview</span><span class="nav-indicator"></span
+        ></a>
+        <a
+          href="#sessions"
+          data-view="sessions"
+          ><svg><use href="#i-clock" /></svg><span>Sessions</span></a
+        >
+        <a
+          href="#insights"
+          data-view="insights"
+          ><svg><use href="#i-chart" /></svg><span>Insights</span></a
+        >
+        <a
+          href="#learn"
+          data-view="learn"
+          ><svg><use href="#i-book" /></svg><span>Learn</span></a
+        >
+        <div class="nav-divider"></div>
+        <a
+          href="#device"
+          data-view="device"
+          ><svg><use href="#i-mat" /></svg><span>My cushion</span
+          ><span class="connection-dot"></span
+        ></a>
+        <a
+          href="#settings"
+          data-view="settings"
+          ><svg><use href="#i-settings" /></svg><span>Preferences</span></a
+        >
+      </nav>
+      <!-- Bottom of the sidebar: a reminder card, a privacy button, and the user's name/avatar -->
+      <div class="sidebar-bottom">
+        <!-- Reminder card with a button that opens the 60-second reset -->
+        <div class="little-reminder">
+          <div class="leaf-illustration">
+            <svg><use href="#i-leaf" /></svg>
+          </div>
+          <h3>A little movement.<br />A better day.</h3>
+          <p>Make room for a moment<br />away from your desk.</p>
+          <button
+            class="text-button"
+            data-action="routine"
+          >
+            Find your reset <svg><use href="#i-arrow" /></svg>
+          </button>
+        </div>
+        <!-- Button that opens the privacy information popup -->
+        <button
+          class="privacy-link"
+          data-action="privacy"
+        >
+          <svg><use href="#i-shield" /></svg><span>Private by design</span><span>↗</span>
+        </button>
+        <!-- Avatar letter and name. app.js fills these in from the name saved in Preferences -->
+        <div class="profile">
+          <div
+            class="profile-avatar"
+            id="profileInitial"
+          >
+            Y
+          </div>
+          <div>
+            <strong id="profileName">Your workspace</strong><span>Make yourself comfortable</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================================================
+     MAIN AREA (everything to the right of the sidebar)
+     ============================================================ -->
+    <div class="main-shell">
+      <!-- Top bar: breadcrumb on the left; "Stored on your device" label, notification bell and avatar on the right -->
+      <header class="topbar">
+        <div class="breadcrumb">
+          Your space <span>/</span> <strong id="breadcrumb">Overview</strong>
+        </div>
+        <div class="topbar-right">
+          <span class="local-status"><span></span> Stored on your device</span
+          ><button
+            class="icon-button notification-button"
+            data-action="notifications"
+            aria-label="Open notifications"
+          >
+            <svg><use href="#i-bell" /></svg><i id="notificationDot"></i></button
+          ><span class="header-avatar">S</span>
+        </div>
+      </header>
+      <!-- app.js switches between these views when a menu link is clicked. -->
+      <main id="main">
+        <!-- ==========================================================
+       PAGE 1: OVERVIEW (the home page)
+       ========================================================== -->
+        <section
+          class="view active"
+          id="view-overview"
+          aria-labelledby="overview-heading"
+        >
+          <!-- Page title, today's date line, and the "Export data" button -->
+          <div class="page-heading">
+            <div>
+              <div
+                class="eyebrow"
+                id="todayDate"
+              >
+                YOUR DAILY CHECK-IN
+              </div>
+              <h1 id="overview-heading">Find your rhythm<span>.</span></h1>
+              <p>A little awareness goes a long way. Let’s make today feel good.</p>
+            </div>
+            <button
+              class="button button-white"
+              data-action="export"
+            >
+              <svg><use href="#i-download" /></svg> Export data
+            </button>
+          </div>
+          <!-- Banner explaining this is a demo that runs without the real hardware -->
+          <div class="demo-banner">
+            <span class="demo-tag"><span></span> INTERACTIVE DEMO</span
+            ><span>Try your cushion before connecting the hardware.</span
+            ><button data-action="device">
+              Explore the device <svg><use href="#i-arrow" /></svg>
+            </button>
+          </div>
+          <!-- Top row: the cushion picture (left) and the current session timer (right) -->
+          <div class="hero-grid">
+            <!-- LEFT CARD: the cushion picture with pressure readings -->
+            <article class="cushion-card">
+              <!-- Card title and a "Seated" / "Away" status badge -->
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">A LITTLE BODY AWARENESS</span>
+                  <h2>Your seat, in real time.</h2>
+                </div>
+                <span
+                  class="status-pill"
+                  id="occupancyBadge"
+                  ><i></i> Seated</span
+                >
+              </div>
+              <!-- Cushion illustration, decorative background, and the occupancy message -->
+              <div
+                class="cushion-stage"
+                id="cushionStage"
+              >
+                <!-- Decorative background grid and circles -->
+                <div class="stage-grid"></div>
+                <div class="stage-orbit orbit-one"></div>
+                <div class="stage-orbit orbit-two"></div>
+                <span class="stage-caption top-caption">SITWELL CUSHION <span>01</span></span>
+                <!-- The cushion drawing. Everything between <svg ...> and </svg> is a picture, not page text -->
+                <svg
+                  class="cushion-art"
+                  viewBox="0 0 620 340"
+                  role="img"
+                  aria-label="Cushion illustration with one simulated FSR occupancy input"
+                >
+                  <!-- Reusable drawing ingredients: gradients (color blends), a blur for the shadow, a fabric texture, and a cut-out shape (clipPath) that keeps the glows inside the cushion -->
+                  <defs>
+                    <linearGradient
+                      id="matTop"
+                      x1="0"
+                      y1="0"
+                      x2=".8"
+                      y2="1"
+                    >
+                      <stop stop-color="#63927d" />
+                      <stop
+                        offset=".55"
+                        stop-color="#35634f"
+                      />
+                      <stop
+                        offset="1"
+                        stop-color="#214737"
+                      />
+                    </linearGradient>
+                    <linearGradient
+                      id="matSide"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop stop-color="#325b46" />
+                      <stop
+                        offset="1"
+                        stop-color="#122e23"
+                      />
+                    </linearGradient>
+                    <radialGradient id="pressureGlow">
+                      <stop
+                        stop-color="#f2ffd1"
+                        stop-opacity=".95"
+                      />
+                      <stop
+                        offset=".3"
+                        stop-color="#d1ee92"
+                        stop-opacity=".8"
+                      />
+                      <stop
+                        offset=".68"
+                        stop-color="#b6d97a"
+                        stop-opacity=".3"
+                      />
+                      <stop
+                        offset="1"
+                        stop-color="#b6d97a"
+                        stop-opacity="0"
+                      />
+                    </radialGradient>
+                    <filter
+                      id="matShadow"
+                      x="-.5"
+                      y="-.5"
+                      width="2"
+                      height="2"
+                    >
+                      <feGaussianBlur stdDeviation="13" />
+                    </filter>
+                    <filter id="softGlow"><feGaussianBlur stdDeviation="3" /></filter>
+                    <pattern
+                      id="fabric"
+                      width="5"
+                      height="5"
+                      patternUnits="userSpaceOnUse"
+                    >
+                      <path
+                        d="M0 0 5 5M0 5 5 0"
+                        stroke="#d4e7cc"
+                        stroke-width=".3"
+                        opacity=".13"
+                      />
+                    </pattern>
+                    <clipPath id="matClip">
+                      <path
+                        d="M90 140Q73 126 100 113L286 32Q304 24 330 34L527 119Q551 131 530 146L334 253Q314 264 291 252Z"
+                      />
+                    </clipPath>
+                  </defs>
+                  <!-- Soft shadow under the cushion -->
+                  <ellipse
+                    cx="314"
+                    cy="262"
+                    rx="201"
+                    ry="25"
+                    fill="#183427"
+                    opacity=".22"
+                    filter="url(#matShadow)"
+                  />
+                  <!-- The cushion's side (thickness) -->
+                  <path
+                    d="M86 130v27q0 9 15 18l189 94q25 14 45 1l194-106q13-7 13-21v-13L325 242Z"
+                    fill="url(#matSide)"
+                  />
+                  <!-- The cushion's top surface -->
+                  <path
+                    d="M90 140Q73 126 100 113L286 32Q304 24 330 34L527 119Q551 131 530 146L334 253Q314 264 291 252Z"
+                    fill="url(#matTop)"
+                    stroke="#80a387"
+                    stroke-width="1"
+                  />
+                  <!-- One conceptual FSR glow, not a spatial pressure map. -->
+                  <g clip-path="url(#matClip)">
+                    <rect
+                      x="70"
+                      y="20"
+                      width="490"
+                      height="250"
+                      fill="url(#fabric)"
+                    />
+                    <g class="occupancy-glow">
+                      <ellipse
+                        cx="311"
+                        cy="142"
+                        rx="106"
+                        ry="61"
+                        fill="url(#pressureGlow)"
+                      />
+                    </g>
+                    <path
+                      d="m115 126 180-78q12-5 24 0l188 81q10 5 0 11L326 237q-12 6-23 0l-188-98q-12-6 0-13Z"
+                      fill="none"
+                      stroke="#b0c5a4"
+                      stroke-opacity=".4"
+                      stroke-width="1"
+                      stroke-dasharray="2 4"
+                    />
+                  </g>
+
+                  <!-- Small "sitwell." logo tag on the front edge -->
+                  <path
+                    d="m289 259 44 0-4 13-37-1Z"
+                    fill="#d1e1c3"
+                  />
+                  <text
+                    x="297"
+                    y="268"
+                    font-size="6"
+                    fill="#244735"
+                    font-family="monospace"
+                  >
+                    sitwell.
+                  </text>
+                  <!-- One conceptual input; the actual placement depends on the assembly. -->
+                  <g class="fsr-marker">
+                    <circle
+                      cx="311"
+                      cy="142"
+                      r="15"
+                      fill="none"
+                      stroke="#e4f5c8"
+                      stroke-width="1"
+                      opacity=".7"
+                    />
+                    <circle
+                      cx="311"
+                      cy="142"
+                      r="4"
+                      fill="#e4f5c8"
+                    />
+                  </g>
+                  <path
+                    d="M311 142 220 88H135"
+                    fill="none"
+                    stroke="#88a48b"
+                    stroke-width="1"
+                  />
+                  <text
+                    x="100"
+                    y="78"
+                    font-size="10"
+                    fill="#5c7562"
+                    font-family="monospace"
+                  >
+                    FSR 01
+                  </text>
+                </svg>
+                <!-- app.js updates the occupancy message when pressure changes -->
+                <div class="occupancy-bubble">
+                  <span class="mini-dot"></span><span id="occupancyCaption">Pressure detected</span
+                  ><svg><use href="#i-check" /></svg>
+                </div>
+                <div class="stage-bottom">
+                  <span><i></i> Simulated sensor signal</span><span>1 FSR · OCCUPANCY</span>
+                </div>
+              </div>
+              <!-- Single raw ADC input with a threshold marker. This is not a weight measurement. -->
+              <div class="fsr-readout">
+                <div class="fsr-readout-heading">
+                  <div>
+                    <span class="readout-label">SEAT PRESSURE</span
+                    ><strong id="seatDetection">Detected</strong>
+                  </div>
+                  <div class="fsr-signal-value">
+                    <span class="readout-label">SIMULATED RAW SIGNAL</span
+                    ><strong id="fsrSignal">2400<span> ADC</span></strong>
+                  </div>
+                </div>
+                <div
+                  class="fsr-signal-track"
+                  id="fsrSignalTrack"
+                  role="meter"
+                  aria-label="Simulated raw FSR signal"
+                  aria-valuemin="0"
+                  aria-valuemax="4095"
+                  aria-valuenow="2400"
+                >
+                  <i id="fsrSignalFill"></i
+                  ><span
+                    class="fsr-threshold"
+                    id="fsrThresholdMarker"
+                    title="Reference sitting threshold: 500 ADC"
+                  ></span>
+                </div>
+                <div class="fsr-signal-labels">
+                  <span>Sitting threshold: 500 ADC</span><span>ADC range: 0–4095 · not weight</span>
+                </div>
+              </div>
+              <!-- Manual demo controls. They simulate occupancy without changing real hardware. -->
+              <div class="demo-controls occupancy-controls">
+                <span>TRY IT OUT</span
+                ><button
+                  class="selected"
+                  data-scenario="seated"
+                  aria-pressed="true"
+                >
+                  Sit down</button
+                ><button
+                  data-scenario="away"
+                  aria-pressed="false"
+                >
+                  Stand up ↗
+                </button>
+              </div>
+            </article>
+
+            <!-- RIGHT CARD: the live session timer and countdown to the next break -->
+            <article class="session-card">
+              <div class="session-card-top">
+                <span class="eyebrow">YOUR CURRENT SESSION</span><svg><use href="#i-clock" /></svg>
+              </div>
+              <!-- Status message (e.g. "Settled in. Stay mindful.") with a colored dot -->
+              <div class="session-state">
+                <i id="sessionDot"></i><span id="sessionState">Settled in. Stay mindful.</span>
+              </div>
+              <!-- Big hours:minutes:seconds clock and its caption -->
+              <div
+                class="session-time"
+                id="sessionTime"
+              >
+                00<span>:</span>00<span>:</span>00
+              </div>
+              <p
+                class="timer-caption"
+                id="timerCaption"
+              >
+                Time seated in this session
+              </p>
+              <div class="session-rule"></div>
+              <!-- Countdown to the next break and a small icon -->
+              <div class="next-break">
+                <div>
+                  <span id="resetLabel">Your next reminder preview</span
+                  ><strong id="resetTime">00:20</strong>
+                </div>
+                <div class="reset-icon">
+                  <svg><use href="#i-walk" /></svg>
+                </div>
+              </div>
+              <!-- Progress bar toward the next break, and a short note under it -->
+              <div class="break-progress"><i id="breakProgress"></i></div>
+              <p
+                class="session-note"
+                id="sessionNote"
+              >
+                We’ll give you a gentle nudge when it’s time to move.
+              </p>
+              <!-- Button to record a movement break now -->
+              <button
+                class="button button-lime"
+                data-action="break"
+                id="breakButton"
+              >
+                <svg><use href="#i-walk" /></svg> Take a little break <span>↗</span>
+              </button>
+              <div class="auto-note">
+                <svg><use href="#i-check" /></svg> Starts when you sit. Pauses when you stand.
+              </div>
+            </article>
+          </div>
+          <!-- Heading for the daily statistics, with a small "DEMO DAY / TODAY" label on the right -->
+          <div class="section-heading">
+            <h2>Your day, one moment at a time.</h2>
+            <span>DEMO DAY <i></i> <span id="dayLabel">TODAY</span></span>
+          </div>
+          <!-- Four summary cards: time seated, movement breaks, average sitting stretch, and a progress message -->
+          <div class="stats-grid">
+            <!-- Card 1: total time seated today and number of sessions (the 14 empty <i> tags are the small decorative bars) -->
+            <article class="stat-card">
+              <div class="stat-label">
+                Time seated <svg><use href="#i-clock" /></svg>
+              </div>
+              <strong id="totalSeated">2h 18m</strong>
+              <p>Across <span id="sessionCount">3</span> sessions today</p>
+              <div
+                class="mini-bars"
+                aria-hidden="true"
+              >
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+                ><i></i><i></i>
+              </div>
+            </article>
+            <!-- Card 2: breaks taken versus the daily goal, with a row of dots (filled in by app.js) -->
+            <article class="stat-card">
+              <div class="stat-label">
+                Movement breaks <svg><use href="#i-walk" /></svg>
+              </div>
+              <strong id="movementCount">4<span> / 6</span></strong>
+              <p id="movementHint">Two more moments for yourself</p>
+              <div
+                class="break-dots"
+                id="breakDots"
+                aria-label="Daily movement goal"
+              ></div>
+            </article>
+            <!-- Card 3: average time spent sitting between breaks, with a small line graph -->
+            <article class="stat-card">
+              <div class="stat-label">
+                Average sitting stretch <svg><use href="#i-chart" /></svg>
+              </div>
+              <strong id="averageStretch">34<span> min</span></strong>
+              <p>A pause between periods of focus</p>
+              <svg
+                class="mini-line"
+                viewBox="0 0 200 25"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0 21 20 15 40 18 60 6 80 11 100 7 120 13 140 6 160 10 180 4 200 7"
+                  fill="none"
+                  stroke="#6d8c65"
+                  stroke-width="2"
+                />
+              </svg>
+            </article>
+            <!-- Card 4: encouraging message about today's breaks -->
+            <article class="stat-card goal-card">
+              <div class="stat-label">
+                A moment of progress <svg><use href="#i-leaf" /></svg>
+              </div>
+              <strong>Little wins.</strong>
+              <p id="winText">You made room for 4 breaks today.</p>
+              <span class="goal-badge"
+                ><svg><use href="#i-check" /></svg> Every reset counts</span
+              >
+            </article>
+          </div>
+
+          <!-- Bottom row: the daily rhythm chart (left) and a "take a break" card with a plant drawing (right) -->
+          <div class="bottom-grid">
+            <!-- Chart card. The Today/Week buttons (data-chart) switch the chart; app.js draws the chart into #rhythmChart -->
+            <article class="card rhythm-card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">THE BIGGER PICTURE</span>
+                  <h2>Your daily rhythm</h2>
+                </div>
+                <div
+                  class="segmented"
+                  aria-label="Rhythm chart period"
+                >
+                  <button
+                    class="active"
+                    data-chart="today"
+                  >
+                    Today</button
+                  ><button data-chart="week">Week</button>
+                </div>
+              </div>
+              <div
+                id="rhythmChart"
+                class="rhythm-chart"
+              ></div>
+              <div class="chart-legend">
+                <span><i class="seated-key"></i> Seated</span
+                ><span><i class="break-key"></i> Movement break</span
+                ><span><i class="away-key"></i> Away</span
+                ><span class="sample-note">Sample history + your demo session</span>
+              </div>
+            </article>
+            <!-- Reminder card with a button that opens the 60-second reset, and a plant drawing -->
+            <article class="reset-card">
+              <div class="reset-copy">
+                <span class="eyebrow">MAKE A LITTLE SPACE</span>
+                <h2>Your next great idea<br />might start with a break.</h2>
+                <p>Step away. Roll your shoulders.<br />Come back with a fresh perspective.</p>
+                <button
+                  class="text-button"
+                  data-action="routine"
+                >
+                  Try a 60-second reset <svg><use href="#i-arrow" /></svg>
+                </button>
+              </div>
+              <svg
+                class="plant-art"
+                viewBox="0 0 130 210"
+                aria-hidden="true"
+              >
+                <path
+                  d="M67 190Q38 118 74 32"
+                  stroke="#567653"
+                  stroke-width="3"
+                  fill="none"
+                />
+                <path
+                  d="M66 151Q5 157 18 100q48 2 48 51ZM63 115q58 1 48-56-49 5-48 56ZM66 73Q26 68 40 25q39 9 26 48ZM73 44Q110 25 91 0 66 15 73 44Z"
+                  fill="#76946c"
+                />
+                <path
+                  d="M46 174h45l-9 36H54Z"
+                  fill="#c0cda3"
+                />
+                <path
+                  d="M16 208h98"
+                  stroke="#b3c09c"
+                />
+              </svg>
+            </article>
+          </div>
+          <aside class="learn-teaser">
+            <span class="learn-teaser-icon"
+              ><svg><use href="#i-book" /></svg
+            ></span>
+            <div>
+              <span class="eyebrow">A LITTLE KNOWLEDGE GOES A LONG WAY</span>
+              <h3>Even a comfortable posture needs a change.</h3>
+              <p>Explore the science, the myths, and the small habits worth keeping.</p>
+            </div>
+            <a
+              class="button button-white"
+              href="#learn"
+              >Get to know your sit <svg><use href="#i-arrow" /></svg
+            ></a>
+          </aside>
+          <!-- Footer text at the bottom of the Overview page -->
+          <footer class="page-footer">
+            <span
+              ><svg><use href="#i-leaf" /></svg> Built for your body. Designed for your day.</span
+            ><span>sitwell. <span class="footer-dot">·</span> A little better, every day.</span>
+          </footer>
+        </section>
+
+        <!-- ==========================================================
+       PAGE 2: SESSIONS (history of past sitting sessions)
+       ========================================================== -->
+        <section
+          class="view"
+          id="view-sessions"
+          aria-labelledby="sessions-heading"
+          hidden
+        >
+          <!-- Page title and the "Export CSV" button -->
+          <div class="page-heading session-heading">
+            <div>
+              <div class="eyebrow">ONE DAY AT A TIME</div>
+              <h1 id="sessions-heading">Room for every reset<span>.</span></h1>
+              <p>Your sitting sessions, with the breaks that make them better.</p>
+            </div>
+            <div class="page-actions">
+              <button
+                class="button button-white"
+                data-action="export"
+              >
+                <svg><use href="#i-download" /></svg> Export CSV</button
+              ><button
+                class="button button-green"
+                data-action="export-json"
+              >
+                <svg><use href="#i-download" /></svg> Export JSON
+              </button>
+            </div>
+          </div>
+          <!-- Info box explaining the 10-second grace period -->
+          <div class="info-banner">
+            <svg><use href="#i-info" /></svg>
+            <p>
+              Away for less than <strong>10 seconds</strong>? Your session stays open. Time away is
+              always excluded from seated time.
+            </p>
+          </div>
+          <!-- Table of sessions. The header row is written here; app.js fills the body (#sessionRows) with one row per session. The All/Completed buttons (data-filter) filter the rows -->
+          <div class="card history-card">
+            <div class="card-heading">
+              <h2>Session history</h2>
+              <div class="segmented">
+                <button
+                  class="active"
+                  data-filter="all"
+                >
+                  All sessions</button
+                ><button data-filter="completed">Completed</button>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>SESSION</th>
+                    <th>STARTED</th>
+                    <th>SEATED TIME</th>
+                    <th>MOVEMENT BREAKS</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="sessionRows"></tbody>
+              </table>
+            </div>
+          </div>
+          <article class="card storage-explainer">
+            <div>
+              <span class="eyebrow">YOUR HISTORY, EXPLAINED</span>
+              <h2>A simple record of your sessions.</h2>
+              <p>
+                A JSON file is plain text containing structured records. Your teammate’s Python app
+                automatically creates <code>sessions.json</code> when it saves a completed session
+                of at least 3 seconds.
+              </p>
+              <p>
+                This standalone demo saves in your browser. JSON export downloads completed demo
+                sessions in the same format; sample history and unfinished sessions are excluded. It
+                does not edit the backend’s file.
+              </p>
+            </div>
+            <div class="json-example">
+              <span>EXAMPLE RECORD / NOT YOUR DATA</span>
+              <pre><code>{
+  "start_time": "2026-11-15 10:00:00",
+  "end_time": "2026-11-15 10:02:10",
+  "duration_seconds": 120
+}</code></pre>
+            </div>
+          </article>
+        </section>
+
+        <!-- ==========================================================
+       PAGE 3: INSIGHTS (weekly patterns and tips)
+       ========================================================== -->
+        <section
+          class="view"
+          id="view-insights"
+          aria-labelledby="insights-heading"
+          hidden
+        >
+          <!-- Page title and a "SAMPLE WEEK" label -->
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">SMALL HABITS. REAL AWARENESS.</div>
+              <h1 id="insights-heading">See the bigger picture<span>.</span></h1>
+              <p>Find patterns in your day and make a little more room for movement.</p>
+            </div>
+            <span class="outline-pill">SAMPLE WEEK</span>
+          </div>
+          <!-- Left: weekly chart (app.js draws it into #weeklyChart). Right: a tip card with a button that opens the reset -->
+          <div class="insight-grid">
+            <article class="card weekly-card">
+              <div class="card-heading">
+                <div>
+                  <span class="eyebrow">MOVEMENT THROUGH THE WEEK</span>
+                  <h2>Every break is a small win.</h2>
+                </div>
+                <span class="outline-pill">7 DAYS</span>
+              </div>
+              <div
+                id="weeklyChart"
+                class="weekly-chart"
+              ></div>
+              <p class="muted">
+                Illustrative history. Your demo activity appears in today’s overview.
+              </p>
+            </article>
+            <article class="insight-feature">
+              <svg><use href="#i-spark" /></svg><span class="eyebrow">A PATTERN TO NOTICE</span>
+              <h2>Make the pause<br />part of the plan.</h2>
+              <p>
+                Pair a movement break with something you already do: refill your water, finish a
+                task, or take a call.
+              </p>
+              <button
+                class="button button-white"
+                data-action="routine"
+              >
+                Build a little reset <svg><use href="#i-arrow" /></svg>
+              </button>
+            </article>
+          </div>
+          <!-- Three short explanation cards: how time is counted, what pressure data means, and how data is stored -->
+          <div class="insight-notes">
+            <article class="card">
+              <svg><use href="#i-clock" /></svg>
+              <h3>Time, without the guesswork.</h3>
+              <p>
+                Seated time adds up only while you’re on the cushion. A quick trip away is recorded
+                separately.
+              </p>
+            </article>
+            <article class="card">
+              <svg><use href="#i-mat" /></svg>
+              <h3>Awareness, without a rating.</h3>
+              <p>
+                One FSR detects seat pressure for occupancy. It cannot measure left/right balance,
+                precise body weight, or posture.
+              </p>
+            </article>
+            <article class="card">
+              <svg><use href="#i-shield" /></svg>
+              <h3>Your habits stay yours.</h3>
+              <p>
+                This demo saves settings and activity in this browser. You can export your session
+                history whenever you like.
+              </p>
+            </article>
+          </div>
+        </section>
+        <!-- LEARN: sourced facts, balanced comparisons, and practical ideas. -->
+        <section
+          class="view"
+          id="view-learn"
+          aria-labelledby="learn-heading"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">THE SITWELL FIELD GUIDE / VOL. 01</div>
+              <h1 id="learn-heading">Good to know. Better to feel<span>.</span></h1>
+              <p>The science, the tradeoffs, and the little things that make a difference.</p>
+            </div>
+            <span class="outline-pill"
+              ><svg><use href="#i-book" /></svg> THE BODY EDIT</span
+            >
+          </div>
+          <div class="learn-hero-grid">
+            <article class="learn-cover">
+              <div class="learn-cover-top">
+                <span class="eyebrow">START WITH THIS</span><span>01 / BODY AWARENESS</span>
+              </div>
+              <h2>Your body likes<br />a change of scene.</h2>
+              <p>
+                Comfortable support matters. So does changing position. OSHA recommends frequent
+                position changes—even when your working posture is good.
+              </p>
+              <div class="learn-cover-bottom">
+                <a
+                  class="learn-source light"
+                  href="https://www.osha.gov/etools/computer-workstations/positions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >OSHA · Working positions <span>↗</span></a
+                ><span class="learn-cover-stamp">SIT. MOVE. REPEAT.</span>
+              </div>
+              <svg
+                class="learn-orbits"
+                viewBox="0 0 260 260"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="130"
+                  cy="130"
+                  r="108"
+                />
+                <circle
+                  cx="130"
+                  cy="130"
+                  r="78"
+                />
+                <circle
+                  cx="130"
+                  cy="130"
+                  r="49"
+                />
+                <path d="M80 168q50-80 100-76" />
+                <circle
+                  class="orbit-node"
+                  cx="80"
+                  cy="168"
+                  r="8"
+                />
+                <circle
+                  class="orbit-node"
+                  cx="180"
+                  cy="92"
+                  r="8"
+                />
+                <circle
+                  class="orbit-node bright"
+                  cx="125"
+                  cy="118"
+                  r="12"
+                />
+              </svg>
+            </article>
+            <article class="learn-numbers card">
+              <span class="eyebrow">ZOOM OUT TO YOUR WEEK</span>
+              <div class="learn-big-number">150<span>+</span></div>
+              <h2>minutes of moderate activity</h2>
+              <p>
+                WHO’s minimum weekly recommendation for adults aged 18–64. Breaks at your desk are
+                one part of a bigger routine.
+              </p>
+              <div class="learn-strength">
+                <strong>2<span>+</span></strong
+                ><span>days of muscle-strengthening<br />activity each week</span>
+              </div>
+              <a
+                class="learn-source"
+                href="https://www.who.int/initiatives/behealthy/physical-activity"
+                target="_blank"
+                rel="noopener noreferrer"
+                >WHO · Activity recommendations <span>↗</span></a
+              >
+            </article>
+          </div>
+          <div class="learn-library-heading">
+            <div>
+              <span class="eyebrow">CURIOUS? GO A LITTLE DEEPER.</span>
+              <h2>Small reads. Useful takeaways.</h2>
+            </div>
+            <span
+              id="learnResultCount"
+              class="learn-result-count"
+              aria-live="polite"
+            ></span>
+          </div>
+          <div class="learn-tools">
+            <div
+              class="learn-filters"
+              role="group"
+              aria-label="Filter learning topics"
+            >
+              <button
+                data-learn-filter="all"
+                class="active"
+                aria-pressed="true"
+              >
+                The full picture</button
+              ><button
+                data-learn-filter="movement"
+                aria-pressed="false"
+              >
+                Movement</button
+              ><button
+                data-learn-filter="desk"
+                aria-pressed="false"
+              >
+                Your desk</button
+              ><button
+                data-learn-filter="cushion"
+                aria-pressed="false"
+              >
+                Cushion decoded</button
+              ><button
+                data-learn-filter="saved"
+                aria-pressed="false"
+              >
+                <svg><use href="#i-book" /></svg> Saved
+              </button>
+            </div>
+            <label class="learn-search"
+              ><svg><use href="#i-info" /></svg
+              ><input
+                id="learnSearch"
+                type="search"
+                placeholder="Find a little insight…"
+                aria-label="Search learning articles"
+            /></label>
+          </div>
+          <div
+            id="learnArticles"
+            class="learn-articles"
+          ></div>
+          <div class="learn-tradeoffs-heading">
+            <span class="eyebrow">THERE’S ALWAYS A LITTLE NUANCE</span>
+            <h2>The upside. The tradeoff. The takeaway.</h2>
+            <p>Different tools help with different things. Here’s the useful middle ground.</p>
+          </div>
+          <div
+            class="learn-comparisons"
+            id="learnComparisons"
+          ></div>
+          <div class="learn-interactive-grid">
+            <article class="card learn-quiz">
+              <div class="card-heading">
+                <span class="eyebrow">A QUICK REALITY CHECK</span
+                ><span
+                  class="outline-pill"
+                  id="quizProgress"
+                  >01 / 03</span
+                >
+              </div>
+              <div id="learnQuiz"></div>
+            </article>
+            <article class="card learn-checklist">
+              <span class="eyebrow">MAKE IT REAL / YOUR DESK CHECK</span>
+              <h2>A setup that meets you where you are.</h2>
+              <p>
+                Use these OSHA-inspired checks as a starting point. Adjust for your body, equipment,
+                and access needs.
+              </p>
+              <div id="deskChecklist"></div>
+              <div class="desk-check-footer">
+                <span
+                  id="deskCheckCount"
+                  aria-live="polite"
+                  >0 of 4 checked</span
+                ><a
+                  class="learn-source"
+                  href="https://www.osha.gov/etools/computer-workstations/positions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >OSHA guidance ↗</a
+                >
+              </div>
+            </article>
+          </div>
+          <article class="learn-faq card">
+            <div>
+              <span class="eyebrow">THE THINGS PEOPLE ACTUALLY ASK</span>
+              <h2>Let’s clear a few things up.</h2>
+            </div>
+            <div class="learn-faq-items">
+              <details>
+                <summary>Does a washroom trip count as a break?<span>+</span></summary>
+                <p>
+                  Yes—it is time away from the cushion. The sensor can detect occupancy, not where
+                  you went. Return within 10 seconds to resume the same session; your away time is
+                  excluded either way.
+                </p>
+              </details>
+              <details>
+                <summary>Is 10 seconds a medical recommendation?<span>+</span></summary>
+                <p>
+                  No. It’s SitWell’s session-grouping rule. Your reminder interval is a separate
+                  preference. Neither setting establishes how long it is medically safe for you to
+                  sit.
+                </p>
+              </details>
+              <details>
+                <summary>Can one FSR measure my posture?<span>+</span></summary>
+                <p>
+                  No. A seat sensor cannot see your neck, spine, screen height, or whole-body
+                  alignment. One FSR estimates occupancy. It cannot measure side-to-side balance,
+                  posture, or body weight.
+                </p>
+              </details>
+              <details>
+                <summary>What if standing or walking isn’t an option?<span>+</span></summary>
+                <p>
+                  Choose movement or position changes that are comfortable and accessible to you.
+                  WHO includes wheeling among ways to be active. Seated movement is not captured by
+                  this prototype’s away-from-seat counter.
+                  <a
+                    href="https://www.who.int/news-room/fact-sheets/detail/physical-activity"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >WHO: physical activity ↗</a
+                  >
+                </p>
+              </details>
+            </div>
+          </article>
+          <div class="learn-bottom-note">
+            <svg><use href="#i-book" /></svg>
+            <div>
+              <strong>Curiosity deserves good sources.</strong>
+              <p>
+                Health facts link to public-health guidance or original research. “Product note”
+                identifies how this prototype works. Educational information; individual needs vary.
+              </p>
+            </div>
+            <a
+              href="#overview"
+              class="text-button"
+              >Back to your rhythm <svg><use href="#i-arrow" /></svg
+            ></a>
+          </div>
+        </section>
+
+        <!-- ==========================================================
+       MY CUSHION (device information and test tools)
+       ========================================================== -->
+        <section
+          class="view"
+          id="view-device"
+          aria-labelledby="device-heading"
+          hidden
+        >
+          <!-- Page title and a "DEMO DEVICE" label -->
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">MEET YOUR QUIET COMPANION</div>
+              <h1 id="device-heading">A smarter place to sit<span>.</span></h1>
+              <p>Understand your cushion. Tune it to your day.</p>
+            </div>
+            <span class="demo-tag"><span></span> DEMO DEVICE</span>
+          </div>
+          <!-- Two columns. Left: device summary (data source, connection status, grace period, storage) plus a note for the hardware team. Right: simulated sensor readings (app.js fills #sensorList) and a "Test reminder" button -->
+          <div class="device-grid">
+            <article class="card device-summary">
+              <div class="device-icon">
+                <svg><use href="#i-mat" /></svg>
+              </div>
+              <span class="eyebrow">SITWELL / CUSHION 01</span>
+              <h2>One sensor. Less guesswork.</h2>
+              <p>
+                One force-sensitive resistor detects seat pressure. Session timing and reminders use
+                that occupied-or-away signal.
+              </p>
+              <dl>
+                <div>
+                  <dt>FSR input</dt>
+                  <dd>GPIO 36 · ADC1</dd>
+                </div>
+                <div>
+                  <dt>Motor output</dt>
+                  <dd>GPIO 2</dd>
+                </div>
+                <div>
+                  <dt>Data source</dt>
+                  <dd>Manual browser demo</dd>
+                </div>
+                <div>
+                  <dt>Hardware connection</dt>
+                  <dd>Not connected</dd>
+                </div>
+                <div>
+                  <dt>Sitting threshold</dt>
+                  <dd>500 ADC</dd>
+                </div>
+                <div>
+                  <dt>ADC range</dt>
+                  <dd>0–4095</dd>
+                </div>
+                <div>
+                  <dt>Serial baud rate</dt>
+                  <dd>115200</dd>
+                </div>
+                <div>
+                  <dt>Nominal sampling</dt>
+                  <dd>250 ms · 4 per second</dd>
+                </div>
+                <div>
+                  <dt>Firmware reminder</dt>
+                  <dd>20 seconds · once per sit</dd>
+                </div>
+                <div>
+                  <dt>Motor pulse</dt>
+                  <dd>800 ms · 0.8 seconds</dd>
+                </div>
+                <div>
+                  <dt>Python session buffer</dt>
+                  <dd>10 seconds</dd>
+                </div>
+                <div>
+                  <dt>Minimum saved session</dt>
+                  <dd>3 seconds</dd>
+                </div>
+                <div>
+                  <dt>Storage</dt>
+                  <dd>This browser only</dd>
+                </div>
+              </dl>
+              <div class="info-banner">
+                <svg><use href="#i-plug" /></svg>
+                <p>
+                  These are the supplied Arduino/Python settings. The ESP32 controls the physical
+                  motor; this page only previews it. Hardware is not connected.
+                </p>
+              </div>
+            </article>
+            <div>
+              <article class="card sensors-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="eyebrow">DEMO TELEMETRY</span>
+                    <h2>One input, clearly shown.</h2>
+                  </div>
+                  <span class="outline-pill">SIMULATED</span>
+                </div>
+                <div id="sensorList"></div>
+                <p class="muted">
+                  Simulated sitting: 2400 ADC; away: 12 ADC. Values follow the Python demo ranges.
+                  ADC is a signal, not kilograms.
+                </p>
+              </article>
+              <article class="card haptic-card">
+                <div>
+                  <h3>A gentle nudge.</h3>
+                  <p>One 800 ms preview pulse.</p>
+                  <p>Motor preview: <strong id="motorPreviewStatus">Off</strong></p>
+                </div>
+                <button
+                  class="button button-green"
+                  data-action="haptic"
+                >
+                  Test reminder
+                </button>
+              </article>
+              <article class="card hardware-timing-note">
+                <span class="eyebrow">TWO TIMERS, TWO JOBS</span>
+                <h3>A reminder is not a session.</h3>
+                <p>
+                  Arduino restarts its 20-second reminder after every stand-up. Python may still
+                  keep the same session open during its separate 10-second buffer.
+                </p>
+                <p>
+                  The supplied Arduino uses a blocking delay for its 800 ms buzz, so serial readings
+                  pause during the pulse. The 250 ms sampling interval is nominal.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================
+       PAGE 5: PREFERENCES (settings form)
+       ========================================================== -->
+        <section
+          class="view"
+          id="view-settings"
+          aria-labelledby="settings-heading"
+          hidden
+        >
+          <!-- Page title -->
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">A RHYTHM THAT’S YOURS</div>
+              <h1 id="settings-heading">Make yourself comfortable<span>.</span></h1>
+              <p>A few small preferences. A day that feels more like you.</p>
+            </div>
+          </div>
+          <!-- Settings form, one row per setting: name, reminder interval, daily break goal, on-screen reminders on/off, and the fixed 10-second grace period (display only). The "Save preferences" button at the end saves everything in this browser -->
+          <form
+            id="settingsForm"
+            class="card settings-card"
+          >
+            <div class="settings-intro">
+              <span class="eyebrow">YOUR WORKSPACE</span>
+              <h2>The little details.</h2>
+            </div>
+            <div class="setting-row">
+              <label for="nameInput"
+                >What should we call you?<small
+                  >A personal touch for your daily check-in.</small
+                ></label
+              ><input
+                id="nameInput"
+                name="name"
+                maxlength="28"
+                placeholder="Your first name"
+                autocomplete="given-name"
+              />
+            </div>
+            <div class="setting-row">
+              <label for="intervalInput"
+                >Reminder preview preset<small
+                  >Only changes this page. Arduino still uses its own REMINDER_MS setting.</small
+                ></label
+              ><select
+                id="intervalInput"
+                name="reminderMs"
+              >
+                <option value="20000">Demo · 20 seconds</option>
+                <option value="1800000">Everyday · 30 minutes</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label for="goalInput"
+                >Daily movement goal<small
+                  >Number of breaks you’d like to make room for.</small
+                ></label
+              ><select
+                id="goalInput"
+                name="goal"
+              >
+                <option value="4">4 breaks</option>
+                <option value="6">6 breaks</option>
+                <option value="8">8 breaks</option>
+                <option value="10">10 breaks</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label for="reminderInput"
+                >On-screen reminders<small
+                  >Shows this page’s alerts. It does not change the physical motor.</small
+                ></label
+              ><input
+                id="reminderInput"
+                type="checkbox"
+                class="toggle"
+                name="reminders"
+                role="switch"
+              />
+            </div>
+            <div class="setting-row">
+              <div>
+                <strong>Session buffer</strong
+                ><small>Come back within 10 seconds to resume the same session.</small>
+              </div>
+              <span class="outline-pill">10 SECONDS</span>
+            </div>
+            <div class="settings-footer">
+              <span
+                ><svg><use href="#i-shield" /></svg> Saved only in this browser.</span
+              ><button
+                type="submit"
+                class="button button-green"
+              >
+                Save preferences <svg><use href="#i-check" /></svg>
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <!-- ============================================================
+     POPUPS (hidden until app.js shows them)
+     ============================================================ -->
+    <!-- Small notification message ("toast") that appears briefly. app.js sets the text in #toastText -->
+    <div
+      class="toast"
+      id="toast"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="toast-icon"
+        ><svg><use href="#i-check" /></svg></span
+      ><span id="toastText"></span
+      ><button
+        aria-label="Dismiss notification"
+        id="dismissToast"
+      >
+        <svg><use href="#i-close" /></svg>
+      </button>
+    </div>
+    <!-- Larger popup window used for privacy info, notifications, the 60-second reset, etc. app.js fills in the title and content -->
+    <dialog id="appDialog">
+      <div class="dialog-top">
+        <span
+          class="eyebrow"
+          id="dialogEyebrow"
+        ></span
+        ><button
+          class="icon-button"
+          id="closeDialog"
+          aria-label="Close dialog"
+        >
+          <svg><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="dialogContent"></div>
+    </dialog>
+  </body>
+</html>
